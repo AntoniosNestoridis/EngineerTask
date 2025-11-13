@@ -53,17 +53,19 @@ public class IXMLFileParser : MonoBehaviour
 
         Debug.Log("Attempting to Parse text file into data...");
 
-        string text = "One car red car blue car";
-        string pat = @"(\w+)\s+(car)";
+        string text = fileContents;
+        string brickListPattern = @"(<Brick .*>)\n(.*>)\n(.*>)"; // Matches one Brick and capture in separate groups the brick line, part line and bone line. Not the best but dont want to spend more time on pretty Regex
+        string partListPattern;
+        string boneListPattern;
 
         // Instantiate the regular expression object.
-        Regex r = new Regex(pat, RegexOptions.IgnoreCase);
+        Regex r = new Regex(brickListPattern, RegexOptions.Multiline);
 
         // Match the regular expression pattern against a text string.
-        var splitList = r.Split(text);
-        int matchCount = splitList.Length;
+        var splitList = r.Matches(text);
+        int matchCount = splitList.Count;
 
-        Debug.Log($"Found {matchCount} entries");
+        Debug.Log($"Found {matchCount} bricks");
 
         foreach (var split in splitList)
         {
