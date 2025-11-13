@@ -38,10 +38,12 @@ public class IXMLFileParser : MonoBehaviour
         // 2. Parse file into a data form
         if (!string.IsNullOrEmpty(fileContents))
         {
-            ParseFile(fileContents);
-        }
+            Model newModel = ParseFile(fileContents);
 
-        // 3. Display results
+            // 3. Print the data to the console / Update UI
+            newModel.PrintModelDataToConsole();
+
+        } 
     }
 
 
@@ -76,7 +78,9 @@ public class IXMLFileParser : MonoBehaviour
         // Extra brick, part and bone data from each match
         foreach (Match brickMatch in brickMatches)
         {
-           // Debug.Log(brickMatch);
+            // Debug.Log(brickMatch);
+
+            Brick newBrick = new Brick();
 
             //Group 1 - Brick
             string brickInfoLine = brickMatch.Groups[1].Value;
@@ -85,14 +89,33 @@ public class IXMLFileParser : MonoBehaviour
             Regex brickR = new Regex(brickDataPattern, RegexOptions.None);
             Match brickInfoMatches = brickR.Match(brickInfoLine);
 
-            string designID = brickInfoMatches.Groups[2].Value;
-            string uuid = brickInfoMatches.Groups[3].Value;
+            newBrick.designID = brickInfoMatches.Groups[2].Value;
+            newBrick.uuid = brickInfoMatches.Groups[3].Value;
             
             //Group 2 - Part
-            string partInfo = brickMatch.Groups[2].Value;
+            string partInfoLine = brickMatch.Groups[2].Value;
+
+            string partDataPattern = "(uuid=\"(.*)\" designID=\"(.*)\" partType=\"(.*)\" materials=\"(.*)\">)";
+            Regex partR = new Regex(partDataPattern, RegexOptions.None);
+            Match partInfoMatches = partR.Match(partInfoLine);
+
+            newBrick.partuuID = partInfoMatches.Groups[2].Value;
+            newBrick.partDesignID = partInfoMatches.Groups[3].Value;            
+            newBrick.partType = partInfoMatches.Groups[4].Value;
+            newBrick.partMaterials = partInfoMatches.Groups[5].Value;
 
             // Group 3 - Bone
             string boneInfo = brickMatch.Groups[3].Value;
+
+            string boneDataPattern = "(uuid=\"(.*)\" transformation=\"(.*)\")";
+            Regex boneReg = new Regex(boneDataPattern, RegexOptions.None);
+            Match boneInfoMatches = boneReg.Match(boneInfo);
+
+            newBrick.boneuuID = boneInfoMatches.Groups[2].Value;
+            newBrick.boneTransformation = boneInfoMatches.Groups[3].Value;            
+
+            // Add bricks to the model list
+            newImportedModel.bricks.Add(newBrick);
         }
 
         //while (m.Success)
@@ -134,7 +157,6 @@ public class IXMLFileParser : MonoBehaviour
     /// <returns></returns>
     public string ReadFileFromDisk(string directory, string filename)
     {
-
         string fileContents = "";
 
         Debug.Log("Attempting to read file contents...");

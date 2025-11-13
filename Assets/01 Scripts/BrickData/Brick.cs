@@ -1,16 +1,21 @@
 using UnityEngine;
 
+/// <summary>
+/// Represents the data for a brick of the model
+/// </summary>
 public class Brick : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    // Brick
+    public string uuid;
+    public string designID;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // Part
+    public string partDesignID;
+    public string partuuID;
+    public string partType;
+    public string partMaterials;
+
+    // Bone
+    public string boneuuID;
+    public string boneTransformation;
 }
