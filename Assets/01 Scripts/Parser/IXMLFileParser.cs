@@ -31,6 +31,7 @@ public class IXMLFileParser : MonoBehaviour
 
     public void CreateBrickData()
     {
+
         // 1. Read text file from disk
         string fileContents = ReadFileFromDisk(FileDirectory,filename);
 
@@ -45,31 +46,53 @@ public class IXMLFileParser : MonoBehaviour
 
 
     /// <summary>
-    /// Parses an IXFML file and creates a new instance of brick data information
+    /// Parses an IXFML file and creates and returns a new instance of a model or null.
     /// </summary>
-    public void ParseFile(string fileContents)
+    public Model ParseFile(string fileContents)
     {
-        // We assume a valid string here
 
+        Model newImportedModel = new Model();
+
+        // We assume a valid string here
         Debug.Log("Attempting to Parse text file into data...");
 
         string text = fileContents;
-        string brickListPattern = @"(<Brick .*>)\n(.*>)\n(.*>)"; // Matches one Brick and capture in separate groups the brick line, part line and bone line. Not the best but dont want to spend more time on pretty Regex
-        string partListPattern;
-        string boneListPattern;
+        string brickListPattern = @"(<Brick .*>)\n(.*>)\n(.*>)"; // Matches one Brick instance and captures in separate groups the brick data, part data and bone data. Not the best but dont want to spend more time on pretty Regex
+       // string brickDataPattern= @"(<Brick .*>)";
+       // string partDataPattern= @"(<Part .*>)";
+        //string boneDataPattern= @"(<Bone .*>)";
 
         // Instantiate the regular expression object.
         Regex r = new Regex(brickListPattern, RegexOptions.Multiline);
 
         // Match the regular expression pattern against a text string.
-        var splitList = r.Matches(text);
-        int matchCount = splitList.Count;
+        var brickMatches = r.Matches(text);
+        int matchCount = brickMatches.Count;
 
-        Debug.Log($"Found {matchCount} bricks");
+        Debug.Log($"Found {matchCount} bricks in model");
+        // Assign later?
+        newImportedModel.TotalBricks = matchCount;
 
-        foreach (var split in splitList)
+        // Extra brick, part and bone data from each match
+        foreach (Match brickMatch in brickMatches)
         {
-            Debug.Log(split);
+           // Debug.Log(brickMatch);
+
+            //Group 1 - Brick
+            string brickInfoLine = brickMatch.Groups[1].Value;
+
+            string brickDataPattern = "(designID=\"(.*)\" uuid=\"(.*)\">)";
+            Regex brickR = new Regex(brickDataPattern, RegexOptions.None);
+            Match brickInfoMatches = brickR.Match(brickInfoLine);
+
+            string designID = brickInfoMatches.Groups[2].Value;
+            string uuid = brickInfoMatches.Groups[3].Value;
+            
+            //Group 2 - Part
+            string partInfo = brickMatch.Groups[2].Value;
+
+            // Group 3 - Bone
+            string boneInfo = brickMatch.Groups[3].Value;
         }
 
         //while (m.Success)
@@ -100,7 +123,7 @@ public class IXMLFileParser : MonoBehaviour
 
         // 5. 
 
-
+        return newImportedModel;
     }
 
     /// <summary>
