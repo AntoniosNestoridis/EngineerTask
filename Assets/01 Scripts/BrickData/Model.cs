@@ -32,7 +32,7 @@ public class Model : MonoBehaviour
 
         }
 
-        Debug.Log("--- --- --- --- ");
+        Debug.Log("--- --- --- --- --- ");
     }
 
 
