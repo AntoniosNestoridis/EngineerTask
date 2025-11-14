@@ -1,16 +1,30 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Part : MonoBehaviour
+/// <summary>
+/// Data container for a Part
+/// </summary>
+public class Part 
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public string designID;
+    public string uuID;
+    public string partType;
+    public string materials;
+
+    public Bone bone;
+
+    public Part(){ }
+    public Part(string designID, string uuID, string partType, string materials)
     {
-        
+        this.designID = designID;
+        this.uuID = uuID;
+        this.partType = partType;
+        this.materials = materials;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddBone(Bone connectingBone)
     {
-        
+        this.bone = connectingBone;
     }
+
 }

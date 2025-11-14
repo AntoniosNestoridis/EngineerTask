@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using System;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 public class IXMLFileParser : MonoBehaviour
 {
@@ -52,17 +53,13 @@ public class IXMLFileParser : MonoBehaviour
     /// </summary>
     public Model ParseFile(string fileContents)
     {
-
         Model newImportedModel = new Model();
 
-        // We assume a valid string here
+        // We assume a valid string format here
         Debug.Log("Attempting to Parse text file into data...");
 
         string text = fileContents;
-        string brickListPattern = @"(<Brick .*>)\n(.*>)\n(.*>)"; // Matches one Brick instance and captures in separate groups the brick data, part data and bone data. Not the best but dont want to spend more time on pretty Regex
-       // string brickDataPattern= @"(<Brick .*>)";
-       // string partDataPattern= @"(<Part .*>)";
-        //string boneDataPattern= @"(<Bone .*>)";
+        string brickListPattern = "<Brick(?:.*?|\n)*</Brick>"; 
 
         // Instantiate the regular expression object.
         Regex r = new Regex(brickListPattern, RegexOptions.Multiline);
@@ -75,76 +72,72 @@ public class IXMLFileParser : MonoBehaviour
         // Assign later?
         newImportedModel.TotalBricks = matchCount;
 
+        // Caching temp variables to reuse during data creation below.
+        string newBrickDesignID;
+        string newBrickUUID;
+
+        string newPartUUID;
+        string newPartDesignID;
+        string newPartType;
+        string newPartMaterials;
+
+        string newBoneUUID;
+        string newBoneTransformation;
+
+        List<Brick> bricks = new List<Brick>();
+
         // Extra brick, part and bone data from each match
         foreach (Match brickMatch in brickMatches)
         {
             // Debug.Log(brickMatch);
-
-            Brick newBrick = new Brick();
-
-            //Group 1 - Brick
-            string brickInfoLine = brickMatch.Groups[1].Value;
+            
+            //1. Brick data
+            string brickInfoLine = brickMatch.Value;
 
             string brickDataPattern = "(designID=\"(.*)\" uuid=\"(.*)\">)";
             Regex brickR = new Regex(brickDataPattern, RegexOptions.None);
             Match brickInfoMatches = brickR.Match(brickInfoLine);
 
-            newBrick.designID = brickInfoMatches.Groups[2].Value;
-            newBrick.uuid = brickInfoMatches.Groups[3].Value;
+            newBrickDesignID = brickInfoMatches.Groups[2].Value;
+            newBrickUUID = brickInfoMatches.Groups[3].Value;
             
-            //Group 2 - Part
-            string partInfoLine = brickMatch.Groups[2].Value;
+            Brick newBrick = new Brick(newBrickUUID, newBrickDesignID);
 
-            string partDataPattern = "(uuid=\"(.*)\" designID=\"(.*)\" partType=\"(.*)\" materials=\"(.*)\">)";
-            Regex partR = new Regex(partDataPattern, RegexOptions.None);
-            Match partInfoMatches = partR.Match(partInfoLine);
+            //2. - Parts and bones
+            string partInfoLine = brickMatch.Value;
 
-            newBrick.partuuID = partInfoMatches.Groups[2].Value;
-            newBrick.partDesignID = partInfoMatches.Groups[3].Value;            
-            newBrick.partType = partInfoMatches.Groups[4].Value;
-            newBrick.partMaterials = partInfoMatches.Groups[5].Value;
+            // Admittedly not the most beautiful regex of all time
+            string partAndBoneDataPattern = "<Part uuid=\"(.*)\" designID=\"(.*)\" partType=\"(.*)\" materials=\"(.*)\">(?:\\s|\n)*<Bone uuid=\"(.*)\" transformation=\"(.*)\" />"; 
+            Regex partR = new Regex(partAndBoneDataPattern, RegexOptions.Multiline);
+            var partMatches = partR.Matches(partInfoLine);
 
-            // Group 3 - Bone
-            string boneInfo = brickMatch.Groups[3].Value;
 
-            string boneDataPattern = "(uuid=\"(.*)\" transformation=\"(.*)\")";
-            Regex boneReg = new Regex(boneDataPattern, RegexOptions.None);
-            Match boneInfoMatches = boneReg.Match(boneInfo);
+            foreach (Match partMatch in partMatches)
+            {
+                // Part
+                newPartUUID = partMatch.Groups[1].Value;
+                newPartDesignID = partMatch.Groups[2].Value;            
+                newPartType = partMatch.Groups[3].Value;
+                newPartMaterials = partMatch.Groups[4].Value;
+                Part newPart = new Part(newPartDesignID, newPartUUID, newPartType, newPartMaterials);
 
-            newBrick.boneuuID = boneInfoMatches.Groups[2].Value;
-            newBrick.boneTransformation = boneInfoMatches.Groups[3].Value;            
+                // Bone
+                newBoneUUID = partMatch.Groups[5].Value;
+                newBoneTransformation = partMatch.Groups[6].Value;
+                Bone newBone = new Bone(newBoneUUID,newBoneTransformation);
+               
+                newPart.AddBone(newBone);
 
-            // Add bricks to the model list
-            newImportedModel.bricks.Add(newBrick);
+                // Clean this up a bit perhaps
+                newBrick.AddPart(newPart);
+            }
+
+            bricks.Add(newBrick);
         }
 
-        //while (m.Success)
-        //{
-        //    Console.WriteLine("Match"+ (++matchCount));
-        //    for (int i = 1; i <= 2; i++)
-        //    {
-        //    Group g = m.Groups[i];
-        //    Console.WriteLine("Group"+i+"='" + g + "'");
-        //    CaptureCollection cc = g.Captures;
-        //    for (int j = 0; j < cc.Count; j++)
-        //    {
-        //        Capture c = cc[j];
-        //        System.Console.WriteLine("Capture"+j+"='" + c + "', Position="+c.Index);
-        //    }
-        //    }
-        //    m = m.NextMatch();
-        //}
 
-
-        // 1. List of individual bricks
-
-        // 2. Parse brick data
-
-        // 3. List of parts 
-
-        // 4. Parse part data
-
-        // 5. 
+        // Add bricks to the model list
+        newImportedModel.bricks = bricks;
 
         return newImportedModel;
     }

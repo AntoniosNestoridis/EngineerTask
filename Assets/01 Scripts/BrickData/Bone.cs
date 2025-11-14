@@ -1,16 +1,20 @@
 using UnityEngine;
 
-public class Bone : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+/// <summary>
+/// Data container for a Bone
+/// </summary>
+public class Bone 
+{
+    public string uuID;
+    public string transformation;
+
+
+    public Bone(){ }
+
+    public Bone(string uuID, string transformation)
     {
-        
+        this.uuID = uuID;
+        this.transformation = transformation;
     }
 }

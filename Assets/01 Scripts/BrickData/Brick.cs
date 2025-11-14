@@ -1,21 +1,35 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Represents the data for a brick of the model
+/// Data holder for a brick of the model
 /// </summary>
-public class Brick : MonoBehaviour
+public class Brick 
 {
     // Brick
     public string uuid;
     public string designID;
 
-    // Part
-    public string partDesignID;
-    public string partuuID;
-    public string partType;
-    public string partMaterials;
+    // Parts
+    public List<Part> parts = new List<Part>();
 
-    // Bone
-    public string boneuuID;
-    public string boneTransformation;
+    public Brick(){ }
+    public Brick(string uuid , string designID)
+    {
+        this.uuid = uuid;
+        this.designID = designID;
+    }
+
+    public void AddPart(Part newPart)
+    {
+        if (!parts.Contains(newPart))
+        {
+            parts.Add(newPart);
+        }
+    }
+
+    public void AddParts(List<Part> newParts)
+    {
+        parts = newParts;
+    }
 }
