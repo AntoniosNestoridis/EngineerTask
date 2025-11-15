@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// A class that represents a model made out of various bricks.
-/// All data about the model are contained within. 
+/// Represents a design model made out of various bricks and sub-parts.
 /// </summary>
 public class Model
 {
@@ -11,6 +10,10 @@ public class Model
 
     public List<Brick> bricks = new List<Brick>(); // A list of the bricks that this model contains
 
+    /// <summary>
+    /// Prints all current data of the model and its bricks.
+    /// Mostly an editor testing function.
+    /// </summary>
     public void PrintModelDataToConsole()
     {
 

@@ -1,23 +1,22 @@
 using UnityEngine;
 using System.IO;
-using UnityEditor;
 using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
+/// <summary>
+/// A simple parser for IXML file types. 
+/// Has the ability to load a file from the disk and convert it into a Model data structure
+/// that can be stored and processed by the application.
+/// </summary>
 public class IXMLFileParser : MonoBehaviour
 {
 
     public string FileDirectory; // TODO: Eventually we want this to be the Application.Filepath
     public string filename;
 
+    // Quick/Debug editor testing only
     public bool ReadFile;
-
-    void Start()
-    {
-       
-    }
-
 
     void Update()
     {
@@ -32,7 +31,6 @@ public class IXMLFileParser : MonoBehaviour
 
     public void CreateBrickData()
     {
-
         // 1. Read text file from disk
         string fileContents = ReadFileFromDisk(FileDirectory,filename);
 
@@ -42,37 +40,42 @@ public class IXMLFileParser : MonoBehaviour
             Model newModel = ParseFile(fileContents);
 
             // 3. Print the data to the console / Update UI
-            newModel.PrintModelDataToConsole();
-
+            if (newModel != null)
+            {
+                newModel.PrintModelDataToConsole();
+            }         
         } 
     }
 
 
     /// <summary>
-    /// Parses an IXFML file and creates and returns a new instance of a model or null.
+    /// Attempts to parse an IXFML file type into a Model structure.
+    /// Returns a new Model instance upon success or null if the parsing the file was invalid.
     /// </summary>
+    /// <param name="fileContents"> The contents of an IXMFL file type as a string. </param>    
     public Model ParseFile(string fileContents)
     {
         Model newImportedModel = new Model();
 
-        // We assume a valid string format here
-        Debug.Log("Attempting to Parse text file into data...");
+        Debug.Log("Attempting to [arse text file into data...");
 
-        string text = fileContents;
         string brickListPattern = "<Brick(?:.*?|\n)*</Brick>"; 
-
-        // Instantiate the regular expression object.
         Regex r = new Regex(brickListPattern, RegexOptions.Multiline);
 
-        // Match the regular expression pattern against a text string.
-        var brickMatches = r.Matches(text);
-        int matchCount = brickMatches.Count;
+        var brickMatches = r.Matches(fileContents);
+        int brickMatchCount = brickMatches.Count;
 
-        Debug.Log($"Found {matchCount} bricks in model");
-        // Assign later?
-        newImportedModel.TotalBricks = matchCount;
+        //No brick matches, invalid file format or simply empty.
+        if (brickMatchCount == 0)
+        {
+            Debug.Log("No matches found for brick pattern. File format is incorrect.");
+            return null;
+        }
 
-        // Caching temp variables to reuse during data creation below.
+        Debug.Log($"-- Found {brickMatchCount} bricks in model description-- ");
+        newImportedModel.TotalBricks = brickMatchCount;
+
+        // Caching temporary variables for reuse during data creation below.
         string newBrickDesignID;
         string newBrickUUID;
 
@@ -86,12 +89,9 @@ public class IXMLFileParser : MonoBehaviour
 
         List<Brick> bricks = new List<Brick>();
 
-        // Extra brick, part and bone data from each match
         foreach (Match brickMatch in brickMatches)
-        {
-            // Debug.Log(brickMatch);
-            
-            //1. Brick data
+        {  
+            //1. Extract brick specific data
             string brickInfoLine = brickMatch.Value;
 
             string brickDataPattern = "(designID=\"(.*)\" uuid=\"(.*)\">)";
@@ -101,9 +101,11 @@ public class IXMLFileParser : MonoBehaviour
             newBrickDesignID = brickInfoMatches.Groups[2].Value;
             newBrickUUID = brickInfoMatches.Groups[3].Value;
             
+
             Brick newBrick = new Brick(newBrickUUID, newBrickDesignID);
 
-            //2. - Parts and bones
+
+            //2. - Extract parts and bones data
             string partInfoLine = brickMatch.Value;
 
             // Admittedly not the most beautiful regex of all time
@@ -111,7 +113,7 @@ public class IXMLFileParser : MonoBehaviour
             Regex partR = new Regex(partAndBoneDataPattern, RegexOptions.Multiline);
             var partMatches = partR.Matches(partInfoLine);
 
-
+            // Each brick may contain multiple parts
             foreach (Match partMatch in partMatches)
             {
                 // Part
@@ -126,37 +128,35 @@ public class IXMLFileParser : MonoBehaviour
                 newBoneTransformation = partMatch.Groups[6].Value;
                 Bone newBone = new Bone(newBoneUUID,newBoneTransformation);
                
-                newPart.AddBone(newBone);
-
-                // Clean this up a bit perhaps
+                // 
+                newPart.ConnectBone(newBone);
                 newBrick.AddPart(newPart);
             }
 
             bricks.Add(newBrick);
         }
 
-
-        // Add bricks to the model list
+        //3. Finalize brick list into the model
         newImportedModel.bricks = bricks;
-
         return newImportedModel;
     }
 
+
     /// <summary>
-    /// Reads a text file from the disk and returns its contents as a string or an empty string if there is an error in the process.
+    /// Loads and reads a text file from the disk. 
+    /// Returns its contents as a singular string if they are valid, otherwise an empty string.
     /// </summary>
-    /// <param name="directory">The directory path </param>
+    /// <param name="directory">The directory path to load from </param>
     /// <param name="filename"> Name of the file to read </param>
     /// <returns></returns>
     public string ReadFileFromDisk(string directory, string filename)
     {
         string fileContents = "";
 
-        Debug.Log("Attempting to read file contents...");
+        Debug.Log($"-- Attempting to load {filename} from path:{directory} --");
 
         try
         {
-            // TODO: Check if directory and/or filename exist first before attempting to read them. But I guess the try catch does the same job.
             // Create an instance of StreamReader to read from a file.
             using (StreamReader sr = new StreamReader( directory + "/" + filename))
             {
@@ -171,7 +171,7 @@ public class IXMLFileParser : MonoBehaviour
         catch (Exception e)
         {
             // Error output
-            Debug.LogError("The file could not be read:");
+            Debug.LogError("Failure. The file could not be read:");
             Debug.LogError(e.Message);
         }
 
