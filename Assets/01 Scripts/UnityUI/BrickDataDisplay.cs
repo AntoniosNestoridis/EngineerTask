@@ -1,6 +1,10 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Controls the setup and display UI of text fields for a single brick and its parts.
+/// Is instantiated along with the appropriate prefab and called by the UI Controller.
+/// </summary>
 public class BrickDataDisplay : MonoBehaviour
 {
     [SerializeField]
@@ -19,7 +23,6 @@ public class BrickDataDisplay : MonoBehaviour
         uuidUIValue.text = brickData.uuid;
 
         // Creating the text structure for parts and bones info
-
         string targetText = ""; // The final text to produce for the parts and bones
 
         // Caching vars

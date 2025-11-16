@@ -17,6 +17,8 @@ public class UIController : MonoBehaviour
     
     [SerializeField]
     private TMP_InputField filenameTextField;
+    [SerializeField]
+    private TextMeshProUGUI errorDisplay;
 
     [Space]
     [SerializeField]
@@ -26,6 +28,7 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI uniquePartsValue;
 
+
     [Space]
     [SerializeField]
     private RectTransform brickListContentParent;
@@ -33,8 +36,6 @@ public class UIController : MonoBehaviour
     private GameObject brickDataDisplayPrefab;
 
     private CancellationTokenSource source;
-    private CancellationToken clearToken;
-
 
     private void Awake()
     {
@@ -68,6 +69,15 @@ public class UIController : MonoBehaviour
         ClearAll();
     }
 
+     /// <summary>
+    /// Exits the application
+    /// </summary>
+    public void ExitApplication()
+    {
+        Debug.Log("Exiting application");
+        Application.Quit();
+    }
+
     // --- 
 
     /// <summary>
@@ -80,9 +90,7 @@ public class UIController : MonoBehaviour
 
         if (loadedModel == null)
         {
-            Debug.LogError("File or model could not be loaded correctly");
-
-            // TODO: Display error
+            DisplayError( "Error. File or model could not be processed");
             return;
         }
 
@@ -112,6 +120,19 @@ public class UIController : MonoBehaviour
         }
     }
 
+    private async void DisplayError(string errorText)
+    {
+        errorDisplay.text = errorText;
+        errorDisplay.gameObject.SetActive(true);
+       
+        await Awaitable.WaitForSecondsAsync(4);
+
+        errorDisplay.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Clears all UI entries and destroys all UI gameobjects in the scrollview content.
+    /// </summary>
     private void ClearAll()
     {
         totalBricksValue.text = "0";
@@ -124,4 +145,6 @@ public class UIController : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+
+   
 }
