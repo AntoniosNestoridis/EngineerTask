@@ -13,38 +13,48 @@ public class IXMLFileParser : MonoBehaviour
 {
 
     public string FileDirectory; // TODO: Eventually we want this to be the Application.Filepath
-    public string filename;
+    public string testFilename;
+
+    private Model model; // The current loadedModel
 
     // Quick/Debug editor testing only
     public bool ReadFile;
+
+
 
     void Update()
     {
         if (ReadFile)
         {
             ReadFile = false;
-            CreateBrickData();
+            LoadAndParseFile(testFilename);
         }
     }
 
 
-
-    public void CreateBrickData()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filename"></param>
+    public Model LoadAndParseFile(string filename)
     {
         // 1. Read text file from disk
-        string fileContents = ReadFileFromDisk(FileDirectory,filename);
+        string fileContents = ReadFileFromDisk(FileDirectory, filename);
 
         // 2. Parse file into a data form
         if (!string.IsNullOrEmpty(fileContents))
         {
-            Model newModel = ParseFile(fileContents);
+            Model newModel = ParseFileToModel(fileContents);
 
-            // 3. Print the data to the console / Update UI
+            // 3. Print the debug data to the console and return the new loaded model
             if (newModel != null)
             {
                 newModel.PrintModelDataToConsole();
+                return newModel;
             }         
-        } 
+        }
+
+        return null;
     }
 
 
@@ -53,11 +63,11 @@ public class IXMLFileParser : MonoBehaviour
     /// Returns a new Model instance upon success or null if the parsing the file was invalid.
     /// </summary>
     /// <param name="fileContents"> The contents of an IXMFL file type as a string. </param>    
-    public Model ParseFile(string fileContents)
+    private Model ParseFileToModel(string fileContents)
     {
         Model newImportedModel = new Model();
 
-        Debug.Log("Attempting to [arse text file into data...");
+        Debug.Log("Attempting to parse text file into data...");
 
         string brickListPattern = "<Brick(?:.*?|\n)*</Brick>"; 
         Regex r = new Regex(brickListPattern, RegexOptions.Multiline);
@@ -149,7 +159,7 @@ public class IXMLFileParser : MonoBehaviour
     /// <param name="directory">The directory path to load from </param>
     /// <param name="filename"> Name of the file to read </param>
     /// <returns></returns>
-    public string ReadFileFromDisk(string directory, string filename)
+    private string ReadFileFromDisk(string directory, string filename)
     {
         string fileContents = "";
 

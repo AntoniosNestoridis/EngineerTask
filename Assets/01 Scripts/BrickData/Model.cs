@@ -10,6 +10,22 @@ public class Model
 
     public List<Brick> bricks = new List<Brick>(); // A list of the bricks that this model contains
 
+
+    public int GetTotalPartsCount()
+    {
+
+        int totalParts = 0;
+
+        foreach (var brick in bricks)
+        {
+            totalParts += brick.parts.Count;
+        }
+
+        return totalParts;
+    }
+
+
+
     /// <summary>
     /// Prints all current data of the model and its bricks.
     /// Mostly an editor testing function.
