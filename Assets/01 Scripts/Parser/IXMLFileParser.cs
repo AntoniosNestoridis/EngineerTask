@@ -12,7 +12,7 @@ using System.Collections.Generic;
 public class IXMLFileParser
 {
     /// <summary>
-    /// 
+    /// Called from UIController. Calls both the file loading and parsing methods.
     /// </summary>
     /// <param name="filename"></param>
     public Model LoadAndParseFile(string filename)
@@ -36,6 +36,42 @@ public class IXMLFileParser
         return null;
     }
 
+
+
+    /// <summary>
+    /// Loads and reads a text file from the disk. 
+    /// Returns its contents as a singular string if they are valid, otherwise an empty string.
+    /// </summary>
+    /// <param name="directory">The directory path to load from </param>
+    /// <param name="filename"> Name of the file to read </param>
+    /// <returns></returns>
+    public string ReadFileFromDisk(string directory, string filename)
+    {
+        Debug.Log($"-- Attempting to load {filename} from path:{directory} --");
+
+        try
+        {
+            // Create an instance of StreamReader to read from a file.
+            using (StreamReader sr = new StreamReader( directory + "/" + filename))
+            {
+                string fileContents = sr.ReadToEnd();
+                if (!string.IsNullOrEmpty(fileContents))
+                {
+                    Debug.Log("Success!");               
+                }
+
+                return fileContents;
+            }
+        }
+        catch (Exception e)
+        {
+            // Returning empty
+            return "";
+        }
+
+                        
+       
+    }
 
     /// <summary>
     /// Attempts to parse an IXFML file type into a Model structure.
@@ -131,40 +167,7 @@ public class IXMLFileParser
     }
 
 
-    /// <summary>
-    /// Loads and reads a text file from the disk. 
-    /// Returns its contents as a singular string if they are valid, otherwise an empty string.
-    /// </summary>
-    /// <param name="directory">The directory path to load from </param>
-    /// <param name="filename"> Name of the file to read </param>
-    /// <returns></returns>
-    public string ReadFileFromDisk(string directory, string filename)
-    {
-        Debug.Log($"-- Attempting to load {filename} from path:{directory} --");
-
-        try
-        {
-            // Create an instance of StreamReader to read from a file.
-            using (StreamReader sr = new StreamReader( directory + "/" + filename))
-            {
-                string fileContents = sr.ReadToEnd();
-                if (!string.IsNullOrEmpty(fileContents))
-                {
-                    Debug.Log("Success!");               
-                }
-
-                return fileContents;
-            }
-        }
-        catch (Exception e)
-        {
-            // Returning empty
-            return "";
-        }
-
-                        
-       
-    }
+   
 
     
 }

@@ -38,12 +38,11 @@ public class UIController : MonoBehaviour
     private void Awake()
     {
         source = new CancellationTokenSource();
-
         parser = new IXMLFileParser();
     }
 
 
-    // -- Button control functionality
+    #region Button control functionality
 
     /// <summary>
     /// Asks the parser to load and parse the model data and if successful display all relevant information to the user.
@@ -78,7 +77,7 @@ public class UIController : MonoBehaviour
         Application.Quit();
     }
 
-    // --- 
+    #endregion
 
     /// <summary>
     /// Actually executes the connection with the parser and handles the displaying of all the retrieved data.
@@ -120,6 +119,10 @@ public class UIController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Displays the given error string message to the user for 4 seconds
+    /// </summary>
+    /// <param name="errorText"></param>
     private async void DisplayError(string errorText)
     {
         errorDisplay.text = errorText;

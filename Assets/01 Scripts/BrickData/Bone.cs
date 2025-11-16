@@ -1,6 +1,3 @@
-using UnityEngine;
-
-
 /// <summary>
 /// A data container for a Bone.
 /// </summary>
@@ -8,8 +5,6 @@ public class Bone
 {
     public string uuID;
     public string transformation;
-
-
 
 
     public Bone(){ }

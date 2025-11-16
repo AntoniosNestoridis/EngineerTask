@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// A data container for a part of a brick.
 /// </summary>
