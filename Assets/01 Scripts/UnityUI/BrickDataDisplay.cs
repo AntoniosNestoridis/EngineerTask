@@ -30,8 +30,8 @@ public class BrickDataDisplay : MonoBehaviour
         {
             Part currentPart = brickData.parts[i];
 
-            partText = $"Part# {i} - DesignID:{currentPart.designID} - UUID: {currentPart.uuID} -\n Type:{currentPart.partType} - Materials:{currentPart.materials}\n";
-            boneText = $"Bone# {i} - UUID: {currentPart.bone.uuID} -\n Transformation:{currentPart.partType}\n" ;
+            partText = $"<color=\"blue\">Part# {i} - DesignID:{currentPart.designID} - UUID: {currentPart.uuID} -\nType:{currentPart.partType} - Materials:{currentPart.materials}\n<color=\"blue\">";
+            boneText = $"<color=\"red\">Bone# {i} - UUID: {currentPart.bone.uuID} -\nTransformation:{currentPart.partType}\n <color=\"red\">" ;
 
             // Concat the new text info with the current one
             targetText = targetText + 

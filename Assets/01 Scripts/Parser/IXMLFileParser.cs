@@ -62,13 +62,15 @@ public class IXMLFileParser : MonoBehaviour
 
         Debug.Log("Attempting to parse text file into data...");
 
+
+        // 1. Identify brick "blocks" of data
         string brickListPattern = "<Brick(?:.*?|\n)*</Brick>"; 
         Regex r = new Regex(brickListPattern, RegexOptions.Multiline);
 
         var brickMatches = r.Matches(fileContents);
         int brickMatchCount = brickMatches.Count;
 
-        //No brick matches, invalid file format or simply empty.
+        //No brick matches found, invalid file format or simply empty file.
         if (brickMatchCount == 0)
         {
             Debug.Log("No matches found for brick pattern. File format is incorrect.");
@@ -94,7 +96,7 @@ public class IXMLFileParser : MonoBehaviour
 
         foreach (Match brickMatch in brickMatches)
         {  
-            //1. Extract brick specific data
+            //2. Extract brick specific data
             string brickInfoLine = brickMatch.Value;
 
             string brickDataPattern = "(designID=\"(.*)\" uuid=\"(.*)\">)";
@@ -108,7 +110,7 @@ public class IXMLFileParser : MonoBehaviour
             Brick newBrick = new Brick(newBrickUUID, newBrickDesignID);
 
 
-            //2. - Extract parts and bones data
+            //3. - Extract parts and bones data
             string partInfoLine = brickMatch.Value;
 
             // Admittedly not the most beautiful regex of all time
@@ -131,7 +133,6 @@ public class IXMLFileParser : MonoBehaviour
                 newBoneTransformation = partMatch.Groups[6].Value;
                 Bone newBone = new Bone(newBoneUUID,newBoneTransformation);
                
-                // 
                 newPart.ConnectBone(newBone);
                 newBrick.AddPart(newPart);
             }

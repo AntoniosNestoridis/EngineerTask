@@ -24,6 +24,27 @@ public class Model
         return totalParts;
     }
 
+    public int GetUniquePartsCount()
+    {
+
+        int totalUniqueParts = 0;
+        List<string> seenParts = new List<string>();
+
+        foreach (var brick in bricks)
+        {
+            foreach (var part in brick.parts)
+            {
+                // New unique part found
+                if (!seenParts.Contains(part.designID))
+                {
+                    seenParts.Add(part.designID);
+                    totalUniqueParts++;
+                }
+            }
+        }
+
+        return totalUniqueParts;
+    }
 
 
     /// <summary>
