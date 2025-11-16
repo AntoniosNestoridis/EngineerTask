@@ -2838,7 +2838,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1377090367}
-  - component: {fileID: 1377090366}
   m_Layer: 0
   m_Name: 01 Parser
   m_TagString: Untagged
@@ -2846,20 +2845,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1377090366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377090365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc9e1c8965240c44ab96917c8d8d88b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EditorFileDirectory: Assets/04 Data
-  DebugtestFilename: 
 --- !u!4 &1377090367
 Transform:
   m_ObjectHideFlags: 0
@@ -3500,7 +3485,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97c8ee42d29b3d46b39e2bec9fc0eeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parser: {fileID: 1377090366}
   filenameTextField: {fileID: 254003252}
   errorDisplay: {fileID: 888436466}
   totalBricksValue: {fileID: 767663253}

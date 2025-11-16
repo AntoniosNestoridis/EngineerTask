@@ -9,22 +9,8 @@ using System.Collections.Generic;
 /// Has the ability to load a file from the disk and convert it into a Model data structure
 /// that can be stored and processed by the application.
 /// </summary>
-public class IXMLFileParser : MonoBehaviour
+public class IXMLFileParser
 {
-    [SerializeField]
-    private string EditorFileDirectory; // TODO: Eventually we want this to be the Application.Filepath
-    [SerializeField] 
-    private string DebugtestFilename;
-
-    private string CurrentFileDirectory;
-    private Model model; // The current loadedModel
-
-    void Awake()
-    {
-        // CurrentFileDirectory = Application.platform == RuntimePlatform.edi ? DebugFileDirectory : "";
-        Debug.Log(Application.streamingAssetsPath);
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -153,10 +139,8 @@ public class IXMLFileParser : MonoBehaviour
     /// <param name="directory">The directory path to load from </param>
     /// <param name="filename"> Name of the file to read </param>
     /// <returns></returns>
-    private string ReadFileFromDisk(string directory, string filename)
+    public string ReadFileFromDisk(string directory, string filename)
     {
-        string fileContents = "";
-
         Debug.Log($"-- Attempting to load {filename} from path:{directory} --");
 
         try
@@ -164,22 +148,23 @@ public class IXMLFileParser : MonoBehaviour
             // Create an instance of StreamReader to read from a file.
             using (StreamReader sr = new StreamReader( directory + "/" + filename))
             {
-                fileContents = sr.ReadToEnd();
-                
+                string fileContents = sr.ReadToEnd();
                 if (!string.IsNullOrEmpty(fileContents))
                 {
-                    Debug.Log("Success!");
+                    Debug.Log("Success!");               
                 }
+
+                return fileContents;
             }
         }
         catch (Exception e)
         {
-            // Error output
-            Debug.LogError("Failure. The file could not be read:");
-            Debug.LogError(e.Message);
+            // Returning empty as declared above
+            return "";
         }
 
-        return fileContents;     
+                        
+       
     }
 
     

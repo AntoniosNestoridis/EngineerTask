@@ -10,10 +10,6 @@ using System.Threading;
 /// </summary>
 public class UIController : MonoBehaviour
 {
-
-    [SerializeField]
-    private IXMLFileParser parser;
-
     
     [SerializeField]
     private TMP_InputField filenameTextField;
@@ -37,9 +33,13 @@ public class UIController : MonoBehaviour
 
     private CancellationTokenSource source;
 
+    private IXMLFileParser parser;
+
     private void Awake()
     {
         source = new CancellationTokenSource();
+
+        parser = new IXMLFileParser();
     }
 
 
