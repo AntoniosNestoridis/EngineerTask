@@ -11,26 +11,19 @@ using System.Collections.Generic;
 /// </summary>
 public class IXMLFileParser : MonoBehaviour
 {
+    [SerializeField]
+    private string EditorFileDirectory; // TODO: Eventually we want this to be the Application.Filepath
+    [SerializeField] 
+    private string DebugtestFilename;
 
-    public string FileDirectory; // TODO: Eventually we want this to be the Application.Filepath
-    public string testFilename;
-
+    private string CurrentFileDirectory;
     private Model model; // The current loadedModel
 
-    // Quick/Debug editor testing only
-    public bool ReadFile;
-
-
-
-    void Update()
+    void Awake()
     {
-        if (ReadFile)
-        {
-            ReadFile = false;
-            LoadAndParseFile(testFilename);
-        }
+        // CurrentFileDirectory = Application.platform == RuntimePlatform.edi ? DebugFileDirectory : "";
+        Debug.Log(Application.streamingAssetsPath);
     }
-
 
     /// <summary>
     /// 
@@ -39,7 +32,7 @@ public class IXMLFileParser : MonoBehaviour
     public Model LoadAndParseFile(string filename)
     {
         // 1. Read text file from disk
-        string fileContents = ReadFileFromDisk(FileDirectory, filename);
+        string fileContents = ReadFileFromDisk(Application.streamingAssetsPath, filename);
 
         // 2. Parse file into a data form
         if (!string.IsNullOrEmpty(fileContents))

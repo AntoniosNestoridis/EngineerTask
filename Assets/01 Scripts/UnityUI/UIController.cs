@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using System.Threading;
 
 public class UIController : MonoBehaviour
 {
@@ -39,10 +40,16 @@ public class UIController : MonoBehaviour
         // TODO:
     }
 
+
+    public void LoadModelUI()
+    {
+        LoadAndParseModel(Application.exitCancellationToken);
+    }
+
     /// <summary>
     /// Calls the pars
     /// </summary>
-    public async void LoadAndParseModel()
+    private async void LoadAndParseModel(CancellationToken applicationExitToken)
     {
         // Parser call 
         Model loadedModel = parser.LoadAndParseFile(filenameTextField.text);
@@ -60,7 +67,7 @@ public class UIController : MonoBehaviour
         totalBricksValue.text = loadedModel.TotalBricks.ToString();
         totalPartsValue.text = loadedModel.GetTotalPartsCount().ToString();
         uniquePartsValue.text = "0";// loadedModel.GetUniquesPartsCount(loadedModel);
-        
+
         // Display brick list info
         for (int i = 0; i < loadedModel.bricks.Count; i++)
         {
@@ -68,9 +75,17 @@ public class UIController : MonoBehaviour
             BrickDataDisplay newDataDisplay = Instantiate(brickDataDisplayPrefab, brickListContentParent).GetComponent<BrickDataDisplay>();
 
             // Setup values
-            newDataDisplay.SetupDisplayData(loadedModel.bricks[i], i );
+            newDataDisplay.SetupDisplayData(loadedModel.bricks[i], i);
 
             await Task.Yield();
+
+            // Cancel the operation and clear if the application exits
+            if (applicationExitToken.IsCancellationRequested)
+            {
+                Debug.Log("Cancelling brick data display method due to application exit");
+                return;
+            }
+
         }
 
 

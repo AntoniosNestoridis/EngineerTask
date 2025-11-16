@@ -282,7 +282,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: everyoneisawesome.lxfml
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -532,12 +532,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -958.33325, y: -519.7898, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1634810077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
@@ -648,7 +648,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337792084}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -748,6 +748,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 640239544}
     m_Modifications:
+    - target: {fileID: 1033619252527368011, guid: 6a04c010bc1b61a4186d1bf2d6c095e7, type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1377036047074853791, guid: 6a04c010bc1b61a4186d1bf2d6c095e7, type: 3}
       propertyPath: m_text
       value: 'Parts(unique):'
@@ -1023,11 +1027,11 @@ Transform:
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -958.33325, y: -517.7898, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1634810077}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
@@ -1124,12 +1128,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438495929}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -958.33325, y: -520.7898, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1634810077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &458524929
 GameObject:
@@ -2098,7 +2102,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u200B"
+  m_text: "everyoneisawesome.lxfml\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2262,7 +2266,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1773700166}
         m_TargetAssemblyTypeName: UIController, Assembly-CSharp
-        m_MethodName: LoadAndParseModel
+        m_MethodName: LoadModelUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2688,7 +2692,7 @@ GameObject:
   - component: {fileID: 1377090367}
   - component: {fileID: 1377090366}
   m_Layer: 0
-  m_Name: Parser
+  m_Name: 01 Parser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2706,9 +2710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc9e1c8965240c44ab96917c8d8d88b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FileDirectory: Assets/04 Data
-  testFilename: 
-  ReadFile: 0
+  EditorFileDirectory: Assets/04 Data
+  DebugtestFilename: 
 --- !u!4 &1377090367
 Transform:
   m_ObjectHideFlags: 0
@@ -2923,6 +2926,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1553259331}
   m_CullTransparentMesh: 1
+--- !u!1 &1634810076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1634810077}
+  m_Layer: 0
+  m_Name: 00 SceneRelated
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1634810077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634810076}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 330585546}
+  - {fileID: 410087041}
+  - {fileID: 438495932}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1671900423
 GameObject:
   m_ObjectHideFlags: 0
@@ -3145,7 +3182,7 @@ GameObject:
   - component: {fileID: 1773700165}
   - component: {fileID: 1773700166}
   m_Layer: 0
-  m_Name: UI - Unity
+  m_Name: 02 UI - Unity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3611,6 +3648,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 640239544}
     m_Modifications:
+    - target: {fileID: 1033619252527368011, guid: 6a04c010bc1b61a4186d1bf2d6c095e7, type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1377036047074853791, guid: 6a04c010bc1b61a4186d1bf2d6c095e7, type: 3}
       propertyPath: m_text
       value: 'Parts (total):'
@@ -3878,6 +3919,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 640239544}
     m_Modifications:
+    - target: {fileID: 1033619252527368011, guid: 6a04c010bc1b61a4186d1bf2d6c095e7, type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1377036047074853791, guid: 6a04c010bc1b61a4186d1bf2d6c095e7, type: 3}
       propertyPath: m_text
       value: 'Bricks:'
@@ -4395,8 +4440,6 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 330585546}
-  - {fileID: 410087041}
+  - {fileID: 1634810077}
   - {fileID: 1377090367}
   - {fileID: 1773700165}
-  - {fileID: 438495932}
