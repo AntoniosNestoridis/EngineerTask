@@ -48,7 +48,6 @@ public class IXMLFileParser
 
         Debug.Log("Attempting to parse text file into data...");
 
-
         // 1. Identify brick "blocks" of data
         string brickListPattern = "<Brick(?:.*?|\n)*</Brick>"; 
         Regex r = new Regex(brickListPattern, RegexOptions.Multiline);
@@ -159,7 +158,7 @@ public class IXMLFileParser
         }
         catch (Exception e)
         {
-            // Returning empty as declared above
+            // Returning empty
             return "";
         }
 

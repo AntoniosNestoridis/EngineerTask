@@ -5,7 +5,7 @@ using UnityEngine.TestTools;
 
 public class FileLoadTest
 {
-    // A Test behaves as an ordinary method
+    // A test to check a valid text file
     [Test]
     public void FileLoadingTestValidFile()
     {
@@ -21,14 +21,16 @@ public class FileLoadTest
         Assert.That(result, Is.Not.Empty);
     }
 
+    // A test to check a loading attempt with a non existent or wrong file
     [Test]
     public void FileLoadingTestInvalidFile()
     {
         // 1. Arrange
         IXMLFileParser fileParser = new IXMLFileParser();
         string directory = Application.streamingAssetsPath;
-        string filename = "invald.lxMFl"; // Non existent filename
+        string filename = "invald.lxMFl";
         string expectedResult = "";
+
         // 2. Act
         string result = fileParser.ReadFileFromDisk(directory, filename);
 
